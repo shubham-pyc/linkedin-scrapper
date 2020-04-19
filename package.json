@@ -1,0 +1,23 @@
+{
+  "name": "linkin-scrapper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shubhamg2404/linkedin-scrapper.git"
+  },
+  "author": "Shubham",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shubhamg2404/linkedin-scrapper/issues"
+  },
+  "homepage": "https://github.com/shubhamg2404/linkedin-scrapper#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "puppeteer": "^2.1.1"
+  }
+}
