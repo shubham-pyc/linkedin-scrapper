@@ -5,8 +5,8 @@ class Scrapper {
 
     }
     getDescription(parent) {
-        let fullDescriptionQuery = ".show-more-less-text__text--less";
-        let shortDescriptionQuery = ".show-more-less-text__text--more";
+        let fullDescriptionQuery = ".show-more-less-text__text--more";
+        let shortDescriptionQuery = ".show-more-less-text__text--less";
         let retValue = "";
         try {
             var descriptionDiv = parent.find(fullDescriptionQuery);
