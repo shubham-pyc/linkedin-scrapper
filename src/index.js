@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 const utils = require("./utils");
 const EducationScrapper = require("./educaiton_scrapper")
 const ExperienceScrapper = require("./experience_scrapper");
-
+const ProjectScrapper = require("./project_scrapper");
 
 const profile = {
     about: "", //done
@@ -25,72 +25,6 @@ function scrapName() {
         retValue = "";
     try {
         retValue = $(nameQuery).text();
-    } catch (e) {
-        console.error(e);
-    }
-    return retValue;
-}
-
-
-function scrapProjects(creds) {
-    var retValue = [];
-    var titleQuery = ".result-card__title.personal-project__title";
-    var fullDescriptionQuery = ".show-more-less-text.show-more-less-description .show-more-less-text__text--more";
-    var shortDescriptionQuery = ".show-more-less-text.show-more-less-description .show-more-less-text__text--less";
-    var projectsQuery = ".projects.pp-section .result-card__contents.personal-project__contents";
-    try {
-        var projects = $(projectsQuery);
-        if (projects.length) {
-            for (var i = 0; i < projects.length; i++) {
-                let projectModal = {
-                    imageUrl: "",
-                    projectName: "",
-                    projectCategory: "",
-                    projectLink: "",
-                    liveLink: "",
-                    projectDescription: ""
-                };
-
-                var project = $(projects[i]);
-                projectModal.projectName = project.find(titleQuery).text();
-
-                var descriptionDiv = project.find(fullDescriptionQuery);
-                if (descriptionDiv.length == 0) {
-                    descriptionDiv = project.find(shortDescriptionQuery);
-                }
-
-                if (descriptionDiv.length) {
-                    var rawDescription = descriptionDiv.html();
-                    rawDescription = utils.convertHTMLtoMultiLineString(rawDescription);
-
-                    var projectDescriptionRegex = /Project\s?Category\s?\:\s?(.*)/i;
-                    if (rawDescription.match(projectDescriptionRegex)) {
-                        projectModal.projectCategory = rawDescription.match(projectDescriptionRegex)[1];
-                        rawDescription = rawDescription.replace(projectDescriptionRegex, "");
-                    }
-                    projectModal.projectDescription = rawDescription;
-                }
-
-
-                //console.warn(project.find("a.personal-project__button"));
-
-                let projectLinkButton = project.find("a.personal-project__button");
-
-                if (projectLinkButton && projectLinkButton.length) {
-                    var href = projectLinkButton.attr("href");
-                    if (href) {
-                        var projectUrl = href.match(/url\=(.*?)\&amp\;/);
-                        if (projectUrl && projectUrl.length) {
-                            projectUrl = decodeURIComponent(projectUrl[1]);
-                            projectModal.projectLink = projectUrl;
-                        }
-                    }
-                }
-
-                retValue.push(projectModal);
-            }
-        }
-
     } catch (e) {
         console.error(e);
     }
@@ -142,9 +76,9 @@ async function scrapProfile(cred) {
     const context = await page.content();
     global.$ = cheerio.load(context);
 
-    profile.name = scrapName();
+    profile.fullName = scrapName();
     profile.about = scraptAbout();
-    profile.projects = scrapProjects();
+    profile.projects = new ProjectScrapper().scrap();
     profile.workExperience = new ExperienceScrapper().scrap();
     profile.education = new EducationScrapper().scrap();
 
