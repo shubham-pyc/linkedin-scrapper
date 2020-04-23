@@ -43,6 +43,34 @@ class Scrapper {
         }
         return retValue;
     }
+
+    getTitle(parent) {
+        var titleQuery = ".result-card__title";
+        var retValue = "";
+        try {
+            var title = parent.find(titleQuery);
+            if (title.length) {
+                retValue = title.text().trim();
+            }
+        } catch (e) {
+            console.error(e);
+        }
+        return retValue;
+    }
+
+    getSubtitle(parent) {
+        var titleQuery = ".result-card__subtitle";
+        var retValue = "";
+        try {
+            var title = parent.find(titleQuery);
+            if (title.length) {
+                retValue = title.text().trim();
+            }
+        } catch (e) {
+            console.error(e);
+        }
+        return retValue;
+    }
 }
 
 module.exports = Scrapper;

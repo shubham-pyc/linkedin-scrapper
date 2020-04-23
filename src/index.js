@@ -4,6 +4,8 @@ const utils = require("./utils");
 const EducationScrapper = require("./educaiton_scrapper")
 const ExperienceScrapper = require("./experience_scrapper");
 const ProjectScrapper = require("./project_scrapper");
+const AwardScrapper = require("./awards_scrapper");
+const CertificationScrapper = require("./certifications_scrapper");
 
 const profile = {
     about: "", //done
@@ -17,7 +19,9 @@ const profile = {
     skillDescription: ``,
     profileDescription: ``,
     workExperience: [],//done
-    education: [] //done
+    education: [], //done
+    awards: [],
+    certifications: []
 
 }
 function scrapName() {
@@ -81,7 +85,9 @@ async function scrapProfile(cred) {
     profile.projects = new ProjectScrapper().scrap();
     profile.workExperience = new ExperienceScrapper().scrap();
     profile.education = new EducationScrapper().scrap();
-
+    profile.awards = new AwardScrapper().scrap();
+    profile.certifications = new CertificationScrapper().scrap();
+    
     browser.close();
 
     return profile;
