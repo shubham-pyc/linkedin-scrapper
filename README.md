@@ -28,3 +28,12 @@ async function foo(){
 
 foo();
 ```
+
+## Fetching Multiple Profiles
+```javascript
+scrapper({
+    url: ["{country-code}/{profile-id-1}/",
+        "{country-code}/{profile-id-2}/"
+    ]
+}).then(res => console.warn(res));
+```

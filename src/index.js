@@ -7,23 +7,28 @@ const ProjectScrapper = require("./project_scrapper");
 const AwardScrapper = require("./awards_scrapper");
 const CertificationScrapper = require("./certifications_scrapper");
 
-const profile = {
-    about: "", //done
-    projects: "", //done
 
-    skills: [],
-    birthDate: "",
-    fullName: "", //done
-    jobTitle: "", //done
-    email: "",
-    skillDescription: ``,
-    profileDescription: ``,
-    workExperience: [],//done
-    education: [], //done
-    awards: [],
-    certifications: []
+function getProfileModal() {
+    return {
+        about: "", //done
+        projects: "", //done
 
+        skills: [],
+        birthDate: "",
+        fullName: "", //done
+        jobTitle: "", //done
+        email: "",
+        skillDescription: ``,
+        profileDescription: ``,
+        workExperience: [],//done
+        education: [], //done
+        awards: [],
+        certifications: []
+
+    }
 }
+
+
 function scrapName() {
     let nameQuery = ".top-card-layout__entity-info-container .top-card-layout__title",
         retValue = "";
@@ -54,6 +59,14 @@ function scraptAbout() {
 
 
 async function scrapProfile(cred) {
+    var retValue = [];
+    var singleProfile = false;
+    if (cred.url && typeof cred.url === "string") {
+        cred.url = [cred.url];
+        singleProfile = true;
+    }
+
+
     const browser = await puppeteer.launch({
         headless: true
     });
@@ -66,31 +79,44 @@ async function scrapProfile(cred) {
     })
 
 
+    for (var i = 0; i < cred.url.length; i++) {
+        try {
+            await page.evaluate(async (index) => {
 
-    await page.evaluate(async (cred) => {
+                const creds = await getCreds();
+                //console.warn(creds);
+                document.location.pathname = creds.url[index];
 
-        const creds = await getCreds();
-        //console.warn(creds);
-        document.location.pathname = creds.url;
+            }, i)
 
-    })
 
-    await page.waitFor(1000);
+            let profile = getProfileModal();
+            await page.waitFor(1000);
 
-    const context = await page.content();
-    global.$ = cheerio.load(context);
+            const context = await page.content();
+            global.$ = cheerio.load(context);
 
-    profile.fullName = scrapName();
-    profile.about = scraptAbout();
-    profile.projects = new ProjectScrapper().scrap();
-    profile.workExperience = new ExperienceScrapper().scrap();
-    profile.education = new EducationScrapper().scrap();
-    profile.awards = new AwardScrapper().scrap();
-    profile.certifications = new CertificationScrapper().scrap();
-    
+            profile.fullName = scrapName();
+            profile.about = scraptAbout();
+            profile.projects = new ProjectScrapper().scrap();
+            profile.workExperience = new ExperienceScrapper().scrap();
+            profile.education = new EducationScrapper().scrap();
+            profile.awards = new AwardScrapper().scrap();
+            profile.certifications = new CertificationScrapper().scrap();
+
+            retValue.push(profile)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    if (singleProfile && retValue.length != 0) {
+        retValue = retValue[0];
+    }
+
     browser.close();
 
-    return profile;
+    return retValue;
 
 }
 
