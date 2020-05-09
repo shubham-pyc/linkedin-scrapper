@@ -11,7 +11,7 @@ npm install linkedin-scrapper
 const scrapper = require("linkedin-scrapper");
 
 scrapper({
-    url:"{country-code}/{profile-id}/", // ex: in/natsu-gupta/
+    url:"profile-id/", // ex: natsu-gupta/
 }).then(res=>console.warn(res));
 ```
 
