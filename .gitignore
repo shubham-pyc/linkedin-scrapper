@@ -104,3 +104,4 @@ dist
 .tern-port
 
 src/test.js
+test.json

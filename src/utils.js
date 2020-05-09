@@ -18,5 +18,23 @@ module.exports = {
             console.error(e);
         }
         return retValue;
+    },
+    prependPrefix: function (cred) {
+        try {
+            if (cred && cred.url) {
+                for (let index = 0; index < cred.url.length; index++) {
+                    let element = cred.url[index];
+                    if (typeof element == "string") {
+                        if (!element.match(/^\/?in\/.*?/)) {
+                            element = "in/" + element;
+                            cred.url[index] = element
+                        }
+                    }
+
+                }
+            }
+        } catch (e) {
+            console.error(e);
+        }
     }
 }

@@ -22,7 +22,7 @@ scrapper returns a promise so it could be used with await as well.
 const scrapper = require("linkedin-scrapper");
 
 async function foo(){
-    const profile = await scrapper({url:"in/profile-id/"});
+    const profile = await scrapper({url:"profile-id/"}); // example: jeffweiner08
     console.warn(profile);
 }
 
@@ -32,8 +32,8 @@ foo();
 ## Fetching Multiple Profiles
 ```javascript
 scrapper({
-    url: ["{country-code}/{profile-id-1}/",
-        "{country-code}/{profile-id-2}/"
+    url: ["profile-id-1/",
+        "profile-id-2/"
     ]
 }).then(res => console.warn(res));
 ```

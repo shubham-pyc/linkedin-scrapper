@@ -78,7 +78,8 @@ async function scrapProfile(cred) {
         return cred;
     })
 
-
+    utils.prependPrefix(cred);
+    
     for (var i = 0; i < cred.url.length; i++) {
         try {
             await page.evaluate(async (index) => {
